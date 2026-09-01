@@ -1,5 +1,10 @@
 import streamlit as st
-from utils.llm import explain_code, improve_code
+
+from utils.llm import (
+    explain_code,
+    improve_code,
+    optimize_code
+)
 
 
 # ============================================================
@@ -8,7 +13,7 @@ from utils.llm import explain_code, improve_code
 
 st.set_page_config(
     page_title="AI Code Explainer",
-    page_icon="🤖",
+    page_icon="",
     layout="wide"
 )
 
@@ -17,7 +22,7 @@ st.set_page_config(
 # HEADER
 # ============================================================
 
-st.title("🤖 AI Code Explainer")
+st.title("AI Code Explainer")
 
 st.write(
     "Understand, improve, and optimize your code with Generative AI."
@@ -32,7 +37,12 @@ st.divider()
 
 language = st.selectbox(
     "Programming Language",
-    ["Python", "C++", "Java", "JavaScript"]
+    [
+        "Python",
+        "C++",
+        "Java",
+        "JavaScript"
+    ]
 )
 
 code = st.text_area(
@@ -43,41 +53,54 @@ code = st.text_area(
 
 
 # ============================================================
+# ACTION BUTTONS
+# ============================================================
+
+col1, col2, col3 = st.columns(3)
+
+
+# ============================================================
 # EXPLAIN CODE
 # ============================================================
 
-if st.button("🔍 Explain Code", type="primary"):
+with col1:
 
-    if not code.strip():
-
-        st.warning("Please enter some code first.")
-
-    else:
-
-        with st.spinner("🤖 AI is analyzing your code..."):
-
-            try:
-
-                explanation = explain_code(code, language)
-
-                st.divider()
-
-                st.subheader("📖 Code Explanation")
-
-                st.markdown(explanation)
-
-            except Exception as e:
-
-                st.error(f"Something went wrong: {e}")
+    explain_button = st.button(
+        "Explain Code",
+        use_container_width=True,
+        type="primary"
+    )
 
 
 # ============================================================
 # IMPROVE CODE
 # ============================================================
 
-st.divider()
+with col2:
 
-if st.button("✨ Improve Code"):
+    improve_button = st.button(
+        "Improve Code",
+        use_container_width=True
+    )
+
+
+# ============================================================
+# OPTIMIZE CODE
+# ============================================================
+
+with col3:
+
+    optimize_button = st.button(
+        "Optimize Code",
+        use_container_width=True
+    )
+
+
+# ============================================================
+# EXPLAIN CODE RESULT
+# ============================================================
+
+if explain_button:
 
     if not code.strip():
 
@@ -85,18 +108,91 @@ if st.button("✨ Improve Code"):
 
     else:
 
-        with st.spinner("✨ AI is reviewing your code..."):
+        with st.spinner("AI is analyzing your code..."):
 
             try:
 
-                improvement = improve_code(code, language)
+                explanation = explain_code(
+                    code,
+                    language
+                )
 
                 st.divider()
 
-                st.subheader("✨ Code Improvement")
+                st.subheader("Code Explanation")
+
+                st.markdown(explanation)
+
+            except Exception as e:
+
+                st.error(
+                    f"Something went wrong: {e}"
+                )
+
+
+# ============================================================
+# IMPROVE CODE RESULT
+# ============================================================
+
+if improve_button:
+
+    if not code.strip():
+
+        st.warning("Please enter some code first.")
+
+    else:
+
+        with st.spinner("AI is reviewing your code..."):
+
+            try:
+
+                improvement = improve_code(
+                    code,
+                    language
+                )
+
+                st.divider()
+
+                st.subheader("Code Improvement")
 
                 st.markdown(improvement)
 
             except Exception as e:
 
-                st.error(f"Something went wrong: {e}")
+                st.error(
+                    f"Something went wrong: {e}"
+                )
+
+
+# ============================================================
+# OPTIMIZE CODE RESULT
+# ============================================================
+
+if optimize_button:
+
+    if not code.strip():
+
+        st.warning("Please enter some code first.")
+
+    else:
+
+        with st.spinner(" AI is optimizing your code..."):
+
+            try:
+
+                optimization = optimize_code(
+                    code,
+                    language
+                )
+
+                st.divider()
+
+                st.subheader("Code Optimization")
+
+                st.markdown(optimization)
+
+            except Exception as e:
+
+                st.error(
+                    f"Something went wrong: {e}"
+                )
