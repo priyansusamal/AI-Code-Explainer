@@ -2,16 +2,35 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+
 # ============================================================
 # CONFIGURATION
 # ============================================================
 
 load_dotenv()
 
+# Try to get API key from local .env
 api_key = os.getenv("GROQ_API_KEY")
 
+# If running on Streamlit Cloud, get API key from Secrets
 if not api_key:
-    raise ValueError("GROQ_API_KEY not found in .env")
+    try:
+        import streamlit as st
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        pass
+
+# Stop the app if no API key is available
+if not api_key:
+    raise ValueError(
+        "GROQ_API_KEY not found. "
+        "Add it to .env locally or Streamlit Secrets."
+    )
+
+
+# ============================================================
+# GROQ CLIENT
+# ============================================================
 
 client = OpenAI(
     api_key=api_key,
